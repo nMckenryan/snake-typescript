@@ -8,8 +8,8 @@ import useInterval from "./useInterval";
 
 
 // INITIAL VALUES
-const canvasX = 2000;
-const canvasY = 2000;
+const canvasX = 1000;
+const canvasY = 1000;
 const initialSnake = [
   [4, 10],
   [4, 10],
@@ -17,8 +17,9 @@ const initialSnake = [
 
 // TODO: Randomise? 
 const initialApple = [14, 10];
-const scale = 50;
-const timeDelay = 100; //milliseconds
+const scale = 10;
+// TODO: Ramp up speed as high score increases? optional mode?
+const timeDelay = 100; //speed of snake in milliseconds
 
 function App() {
   const canvasRef = useRef<HTMLCanvasElement | null >(null);
@@ -31,6 +32,7 @@ function App() {
 
   useInterval(() => runGame(), delay);
 
+  // GENERATE CANVAS FOR SNAKE GAME
   useEffect(() => {
     let fruit = document.getElementById("fruit") as HTMLCanvasElement
     if(canvasRef.current) {
@@ -66,8 +68,9 @@ function App() {
     setGameOver(false)
   }
 
+  //checks if snake's head has reached the boundaries of the canvas. triggering game over
+  // TODO: Change snake head read on collision
   function checkCollision(head: number[]) {
-    //checks if snake's head has reached the boundaries of the canvas. triggering game over
     for (let i = 0; i < head.length; i++) {
       if (head[i] < 0 || head[i] * scale >= canvasX) return true;
     }
@@ -94,7 +97,6 @@ function App() {
   }
 
 
-
   // START GAME
   function runGame() {
     const newSnake = [...snake];
@@ -116,6 +118,8 @@ function App() {
     setSnake(newSnake);
   }
 
+
+  // TODO: Fix bug where snake can turn in on itself and cause Fail State (i.e. hitting right while snake is movign left triggeres game over)
   function changeDirection(e: React.KeyboardEvent<HTMLDivElement>) {
     switch (e.key) {
       case "ArrowLeft":
@@ -133,12 +137,13 @@ function App() {
     }
   }
 
+  // VIEW RENDER 
   //TODO: INtergrate start screen! 
   return (
     <div onKeyDown={(e) => changeDirection(e)}>
       <img id="fruit" src={AppleLogo} alt="fruit" width="30" />
       <img src={OldMonitor} alt="fruit" width="4000" className="monitor" />
-
+      
       <canvas
         className="playArea"
         ref={canvasRef}

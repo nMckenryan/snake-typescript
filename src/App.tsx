@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./App.css";
 import AppleLogo from "./applePixels.png";
-import OldMonitor from "./oldMonitor.png";
+import Console from "./console.png";
 import useInterval from "./useInterval";
 
 // TODO: Revamp icons in 3D
@@ -142,7 +142,7 @@ function App() {
   return (
     <div onKeyDown={(e) => changeDirection(e)}>
       <img id="fruit" src={AppleLogo} alt="fruit" width="30" />
-      <img src={OldMonitor} alt="fruit" width="4000" className="monitor" />
+      <img src={Console} alt="fruit" width="4000" className="monitor" />
       
       <canvas
         className="playArea"

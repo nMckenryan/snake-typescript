@@ -1,16 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 body {
-	background: white;
+	background: black;
 	font-family: 'Press Start 2P', cursive;
 }
 .playArea {
-    background-color: #92C401;
+    background-color: #93c4014d;
     border: 2px solid grey;
-    width: 595px;
-    height: 410px;
+    width: 599px;
+    height: 418px;
     position: fixed;
-    top: 52%;
-    left: 49.25%;
+    top: 51%;
+    left: 50%;
     transform: translate(-50%, -50%);
 }
 

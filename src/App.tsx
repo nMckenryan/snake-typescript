@@ -3,6 +3,10 @@ import "./App.css";
 import AppleLogo from "./applePixels.png";
 import Console from "./console.png";
 import useInterval from "./useInterval";
+import useSound from 'use-sound';
+
+import appleEaten from "./appleAte.wav";
+// import snakeDead from "./sfx/snakeDead.wav";
 
 // TODO: Revamp icons in 3D
 
@@ -14,7 +18,6 @@ const initialSnake = [
   [4, 10],
 ];
 
-// TODO: Randomise?
 const initialApple = [14, 10];
 const scale = 50;
 // TODO: Ramp up speed as high score increases? optional mode?
@@ -30,10 +33,17 @@ function App() {
     up: [0, -1],
     down: [0, 1],
   };
+  const [lastDirection, setLastDirection] = useState(directions.right)
   const [direction, setDirection] = useState(directions.left);
   const [delay, setDelay] = useState<number | null>(null);
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
+
+const sound = new Howl({
+  src: ['sound.mp3']
+});
+
+
 
 
 
@@ -79,7 +89,6 @@ function App() {
   }
 
   //checks if snake's head has reached the boundaries of the canvas. triggering game over
-  // TODO: Change snake head read on collision
   function checkCollision(head: number[]) {
     // TODO: Negates Issue where snake can collide wiht it's own neck
 
@@ -104,6 +113,8 @@ function App() {
       let newApple = coord;
       setScore(score + 1);
       setApple(newApple);
+      sound.play();
+      // useSound(snakeDead);
       return true;
     }
     return false;
@@ -131,27 +142,43 @@ function App() {
     setSnake(newSnake);
   }
 
-  // function turnCheck(d) {
-  //   if(d != direction) {
-  //     setDirection
-  //   }
-  // }
+  function turnCheck(d: number[]) {
+    if(d != lastDirection) {
+      setDirection(d);
+
+      switch(d) {
+        case directions.left:
+          setLastDirection(directions.right);
+          break;
+        case directions.right:
+          setLastDirection(directions.left);
+          break;
+        case directions.up:
+          setLastDirection(directions.down);
+          break;
+        case directions.down:
+          setLastDirection(directions.up);
+          break;
+      }
+    }
+  }
 
 
   // TODO: Fix bug where snake can turn in on itself and cause Fail State (i.e. hitting right while snake is movign left triggeres game over)
   function changeDirection(e: React.KeyboardEvent<HTMLDivElement>) {
     switch (e.key) {
       case "ArrowLeft":
-        setDirection(directions.left);
+        turnCheck(directions.left);
+        // setDirection(directions.left);
         break;
       case "ArrowRight":
-        setDirection(directions.right);
+        turnCheck(directions.right);
         break;
       case "ArrowUp":
-        setDirection(directions.up);
+        turnCheck(directions.up);
         break;
       case "ArrowDown":
-        setDirection(directions.down);
+        turnCheck(directions.down);
         break;
     }
   }
@@ -160,6 +187,10 @@ function App() {
   //TODO: INtergrate start screen!
   return (
     <div onKeyDown={(e) => changeDirection(e)}>
+            <ReactHowler
+        src='http://goldfirestudios.com/proj/howlerjs/sound.ogg'
+        playing={true}
+      />
       <img id="fruit" src={AppleLogo} alt="fruit" width="30" />
       <img src={Console} alt="fruit" width="4000" className="monitor" />
 

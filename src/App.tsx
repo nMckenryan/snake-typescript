@@ -5,7 +5,9 @@ import Console from "./console.png";
 import useInterval from "./useInterval";
 import useSound from 'use-sound';
 
-import appleEaten from "./appleAte.wav";
+const appleAteSfx = require("./appleAte.mp3");
+// using ES5 imports so typescript doesn't complain.
+
 // import snakeDead from "./sfx/snakeDead.wav";
 
 // TODO: Revamp icons in 3D
@@ -17,6 +19,9 @@ const initialSnake = [
   [4, 10],
   [4, 10],
 ];
+
+
+
 
 const initialApple = [14, 10];
 const scale = 50;
@@ -38,14 +43,6 @@ function App() {
   const [delay, setDelay] = useState<number | null>(null);
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
-
-const sound = new Howl({
-  src: ['sound.mp3']
-});
-
-
-
-
 
   useInterval(() => runGame(), delay);
 
@@ -105,7 +102,13 @@ const sound = new Howl({
 
   // Checks if Apple Eaten
   // TODO: Implement Sound when apple eaten
-  function appleAte(newSnake: number[][]) {
+  function AppleAte(newSnake: number[][]) {
+
+    const [playOn] = useSound(
+      appleAteSfx,
+      { volume: 0.25 }
+    );
+
     // Generates random co-ord
     let coord = apple.map(() => Math.floor((Math.random() * canvasX) / scale));
     // Generate new apple once eaten
@@ -113,7 +116,7 @@ const sound = new Howl({
       let newApple = coord;
       setScore(score + 1);
       setApple(newApple);
-      sound.play();
+      playOn();
       // useSound(snakeDead);
       return true;
     }
@@ -136,7 +139,7 @@ const sound = new Howl({
       setGameOver(true);
       handleSetScore();
     }
-    if (!appleAte(newSnake)) {
+    if (!AppleAte(newSnake)) {
       newSnake.pop();
     }
     setSnake(newSnake);
@@ -187,10 +190,7 @@ const sound = new Howl({
   //TODO: INtergrate start screen!
   return (
     <div onKeyDown={(e) => changeDirection(e)}>
-            <ReactHowler
-        src='http://goldfirestudios.com/proj/howlerjs/sound.ogg'
-        playing={true}
-      />
+
       <img id="fruit" src={AppleLogo} alt="fruit" width="30" />
       <img src={Console} alt="fruit" width="4000" className="monitor" />
 

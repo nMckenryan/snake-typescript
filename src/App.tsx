@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./App.css";
-import AppleLogo from "./applePixels.png";
+import AppleLogo from "./apple.png";
 import Console from "./console.png";
 import useInterval from "./useInterval";
 import useSound from 'use-sound';
 
-const appleAteSfx = require("./appleAte.mp3");
+const scoreSfx = require("./appleAte.mp3");
 // using ES5 imports so typescript doesn't complain.
 
 // import snakeDead from "./sfx/snakeDead.wav";
@@ -105,7 +105,7 @@ function App() {
   function AppleAte(newSnake: number[][]) {
 
     const [playOn] = useSound(
-      appleAteSfx,
+      scoreSfx,
       { volume: 0.25 }
     );
 
@@ -117,7 +117,7 @@ function App() {
       setScore(score + 1);
       setApple(newApple);
       playOn();
-      // useSound(snakeDead);
+
       return true;
     }
     return false;
@@ -146,7 +146,7 @@ function App() {
   }
 
   function turnCheck(d: number[]) {
-    if(d != lastDirection) {
+    if(d !== lastDirection) {
       setDirection(d);
 
       switch(d) {

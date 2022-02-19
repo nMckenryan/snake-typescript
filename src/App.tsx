@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./App.css";
-import AppleLogo from "./apple.png";
-import Console from "./console.png";
+import AppleLogo from "./img/apple.png";
+import Console from "./img/console.png";
 import useInterval from "./useInterval";
 import useSound from 'use-sound';
 
@@ -203,9 +203,13 @@ function App() {
 
       {gameOver && <div className="gameOver">GAME OVER</div>}
 
-      <button onClick={reset} className="playButton">
-        Play
+      
+      <button onClick={reset}  className="playButton">
+
       </button>
+      <div className="playButtonArea">
+      <h4>Play</h4>
+      </div>
 
       <div className="scoreBox">
         <h3>Score: {score}</h3>
